@@ -73,6 +73,10 @@ Configure the Admin and Viewer credentials in `.env`, then run:
 npm run seed:accounts
 ```
 
+```bash
+Host URL https://loan-admin-f9ut.onrender.com
+```
+
 Use the credentials to log in and obtain a JWT token. Do not expose production credentials in the repository.
 
 ## API Endpoints
