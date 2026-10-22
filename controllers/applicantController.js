@@ -204,3 +204,56 @@ export const updateApplicant = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * POST /api/applicants/:id/evaluate
+ * Recalculate eligibility for an existing applicant.
+ */
+export const evaluateApplicantEligibility = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid applicant ID",
+      });
+    }
+
+    const applicant = await Applicant.findById(id);
+
+    if (!applicant) {
+      return res.status(404).json({
+        success: false,
+        message: "Applicant not found",
+      });
+    }
+
+    const products = await Product.find().lean();
+    const evaluationDate = new Date();
+
+    const result = evaluateApplicant(applicant, products, evaluationDate);
+
+    applicant.status = result.status;
+    applicant.eligibleProducts = result.eligibleProducts;
+    applicant.lastEvaluatedAt = result.evaluatedAt;
+
+    await applicant.save();
+
+    await applicant.populate(
+      "eligibleProducts",
+      "name description minAge maxAge minCreditScore minSalary",
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Eligibility evaluated successfully",
+      data: {
+        applicant,
+        age: result.age,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

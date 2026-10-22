@@ -6,6 +6,7 @@ import {
   getApplicantById,
   getEligibleProducts,
   updateApplicant,
+  evaluateApplicantEligibility,
 } from "../controllers/applicantController.js";
 
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -42,6 +43,14 @@ router.patch(
   allowRoles("Admin"),
   validate(updateApplicantSchema),
   updateApplicant,
+);
+
+// Only Admin can manually reevaluate eligibility.
+router.post(
+  "/:id/evaluate",
+  authenticate,
+  allowRoles("Admin"),
+  evaluateApplicantEligibility,
 );
 
 export default router;
