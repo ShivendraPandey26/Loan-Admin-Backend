@@ -35,7 +35,7 @@ A REST API for managing loan products, applicants, and automatic loan eligibilit
 Clone the repository and enter the project directory:
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/ShivendraPandey26/Loan-Admin-Backend.git
 cd loan-admin-backend
 npm install
 ```
