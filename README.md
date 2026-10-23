@@ -21,7 +21,7 @@ The application supports role-based access control for Admin and Viewer accounts
 - [Testing](#testing)
 - [Production Deployment](#production-deployment)
 - [Security Best Practices](#security-best-practices)
-- [License](#license)
+<!-- - [License](#license) -->
 
 ## Overview
 
