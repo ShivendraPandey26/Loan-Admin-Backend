@@ -553,7 +553,7 @@ Use the actual start script defined in `package.json`. The development command `
 - Use structured logging without recording passwords, JWTs, or other secrets.
 - Review dependencies and apply security updates regularly.
 
-## Contributing
+<!-- ## Contributing
 
 Contributions and improvements are welcome.
 
@@ -567,7 +567,7 @@ Ensure that changes preserve the existing API contracts and include tests for ne
 
 ## License
 
-No license has been specified yet. Add a `LICENSE` file and update this section when a license has been selected.
+No license has been specified yet. Add a `LICENSE` file and update this section when a license has been selected. -->
 
 ---
 
