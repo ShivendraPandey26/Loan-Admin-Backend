@@ -5,6 +5,7 @@ import {
   getProductById,
   createProduct,
   updateProduct,
+  deleteProduct,
 } from "../controllers/productController.js";
 
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -38,5 +39,7 @@ router.patch(
   validate(updateProductSchema),
   updateProduct,
 );
+
+router.delete("/:id", authenticate, allowRoles("Admin"), deleteProduct);
 
 export default router;

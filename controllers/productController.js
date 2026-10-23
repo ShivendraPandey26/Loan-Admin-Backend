@@ -116,3 +116,42 @@ export const updateProduct = async (req, res, next) => {
     await session.endSession();
   }
 };
+
+// DELETE /api/products/:id
+export const deleteProduct = async (req, res, next) => {
+  const session = await mongoose.startSession();
+
+  try {
+    let deletedProduct;
+    let evaluationSummary;
+
+    await session.withTransaction(async () => {
+      const product = await Product.findById(req.params.id).session(session);
+
+      if (!product) {
+        const error = new Error("Product not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      deletedProduct = product;
+
+      await Product.deleteOne({ _id: product._id }, { session });
+
+      evaluationSummary = await reEvaluateAllApplicants(session);
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted and applicants re-evaluated successfully",
+      data: {
+        product: deletedProduct,
+        evaluation: evaluationSummary,
+      },
+    });
+  } catch (error) {
+    next(error);
+  } finally {
+    await session.endSession();
+  }
+};
