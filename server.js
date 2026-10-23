@@ -24,7 +24,10 @@ app.use(helmet());
 // Allow requests from the configured frontend origin
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:5173",
+      "https://loanadmins.vercel.app",
+    ],
   }),
 );
 
