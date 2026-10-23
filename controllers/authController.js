@@ -68,3 +68,68 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+// POST /api/viewer-auth/signup
+export const viewerSignup = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name?.trim() || !email?.trim() || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email, and password are required",
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must contain at least 6 characters",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const existingAccount = await Account.findOne({
+      email: normalizedEmail,
+    });
+
+    if (existingAccount) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const account = await Account.create({
+      name: name.trim(),
+      email: normalizedEmail,
+      password: hashedPassword,
+      role: "Viewer",
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Viewer account created successfully",
+      data: {
+        account: {
+          id: account._id,
+          name: account.name,
+          email: account.email,
+          role: account.role,
+        },
+      },
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        success: false,
+        message: "An account with this email already exists",
+      });
+    }
+
+    next(error);
+  }
+};

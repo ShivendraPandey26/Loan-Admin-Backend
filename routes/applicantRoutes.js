@@ -7,6 +7,7 @@ import {
   getEligibleProducts,
   updateApplicant,
   evaluateApplicantEligibility,
+  deleteApplicant,
 } from "../controllers/applicantController.js";
 
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -52,5 +53,7 @@ router.post(
   allowRoles("Admin"),
   evaluateApplicantEligibility,
 );
+
+router.delete("/:id", authenticate, allowRoles("Admin"), deleteApplicant);
 
 export default router;

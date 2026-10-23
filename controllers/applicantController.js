@@ -205,10 +205,7 @@ export const updateApplicant = async (req, res, next) => {
   }
 };
 
-/**
- * POST /api/applicants/:id/evaluate
- * Recalculate eligibility for an existing applicant.
- */
+// POST /api/applicants/:id/evaluate
 export const evaluateApplicantEligibility = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -251,6 +248,39 @@ export const evaluateApplicantEligibility = async (req, res, next) => {
       data: {
         applicant,
         age: result.age,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE /api/applicants/:id
+export const deleteApplicant = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid applicant ID",
+      });
+    }
+
+    const applicant = await Applicant.findByIdAndDelete(id);
+
+    if (!applicant) {
+      return res.status(404).json({
+        success: false,
+        message: "Applicant not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Applicant deleted successfully",
+      data: {
+        applicant,
       },
     });
   } catch (error) {

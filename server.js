@@ -12,6 +12,7 @@ import applicantRoutes from "./routes/applicantRoutes.js";
 
 // middleware
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { overview } from "./config/overview.js";
 
 dotenv.config();
 
@@ -45,6 +46,13 @@ app.use(
 );
 
 // Health check route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: overview,
+  });
+});
+
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
