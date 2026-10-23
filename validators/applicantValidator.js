@@ -4,6 +4,10 @@ export const createApplicantSchema = z
   .object({
     fullName: z.string().trim().min(2).max(100),
 
+    email: z.string().email(),
+
+    phone: z.string().trim().min(10).max(12),
+
     dateOfBirth: z.iso
       .date()
       .refine(

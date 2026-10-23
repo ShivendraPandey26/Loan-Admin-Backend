@@ -8,6 +8,25 @@ const applicantSchema = new mongoose.Schema(
       trim: true,
     },
 
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      match: [
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Invalid Email address",
+      ],
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      required: [true, "Phone number is required"],
+      unique: true,
+      trim: true,
+    },
+
     dateOfBirth: {
       type: Date,
       required: true,
