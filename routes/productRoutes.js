@@ -40,6 +40,7 @@ router.patch(
   updateProduct,
 );
 
+// Only Admin can delete products.
 router.delete("/:id", authenticate, allowRoles("Admin"), deleteProduct);
 
 export default router;

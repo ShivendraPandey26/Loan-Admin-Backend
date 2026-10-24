@@ -177,10 +177,8 @@ export const updateApplicant = async (req, res, next) => {
       });
     }
 
-    // Update only the fields provided
     Object.assign(applicant, req.validatedBody);
 
-    // Recalculate eligibility using the latest applicant details
     const products = await Product.find().lean();
     const evaluationDate = new Date();
 

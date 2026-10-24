@@ -19,10 +19,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security headers
+// Security headers and middleware
 app.use(helmet());
 
-// Allow requests from the configured frontend origin
 app.use(
   cors({
     origin: [
@@ -32,10 +31,8 @@ app.use(
   }),
 );
 
-// Parse JSON request bodies
 app.use(express.json({ limit: "1mb" }));
 
-// Limit excessive requests
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -45,7 +42,7 @@ app.use(
   }),
 );
 
-// Health check route
+// Health check route and overview route
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -69,7 +66,7 @@ app.use("/api/applicants", applicantRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Start only after connecting to MongoDB
+// Start the server
 const startServer = async () => {
   await connectDB();
 

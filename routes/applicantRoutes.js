@@ -54,6 +54,7 @@ router.post(
   evaluateApplicantEligibility,
 );
 
+// Only Admin can delete applicants.
 router.delete("/:id", authenticate, allowRoles("Admin"), deleteApplicant);
 
 export default router;
