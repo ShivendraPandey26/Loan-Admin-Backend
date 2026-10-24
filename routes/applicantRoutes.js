@@ -3,11 +3,12 @@ import express from "express";
 import {
   createApplicant,
   getApplicants,
-  getApplicantById,
+  // getApplicantById,
   getEligibleProducts,
   updateApplicant,
   evaluateApplicantEligibility,
   deleteApplicant,
+  getApplicantByIdAndName,
 } from "../controllers/applicantController.js";
 
 import { authenticate } from "../middleware/authMiddleware.js";
@@ -26,7 +27,8 @@ router.get("/", authenticate, getApplicants);
 
 router.get("/:id/eligible-products", authenticate, getEligibleProducts);
 
-router.get("/:id", authenticate, getApplicantById);
+// router.get("/:id", authenticate, getApplicantById);
+router.get("/:id", authenticate, getApplicantByIdAndName);
 
 // Only Admin can add applicants.
 router.post(

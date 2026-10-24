@@ -90,32 +90,86 @@ export const getApplicants = async (req, res, next) => {
 };
 
 // GET /api/applicants/:id
-export const getApplicantById = async (req, res, next) => {
+// export const getApplicantById = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+
+//     if (!mongoose.isValidObjectId(id)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid applicant ID",
+//       });
+//     }
+
+//     const applicant = await Applicant.findById(id).populate(
+//       "eligibleProducts",
+//       "name description minAge maxAge minCreditScore minSalary",
+//     );
+
+//     if (!applicant) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Applicant not found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: applicant,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+/**
+GET /api/applicants/:id
+         or 
+GET /api/applicants/:fullName
+**/
+export const getApplicantByIdAndName = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid applicant ID",
+    let applicants;
+
+    if (mongoose.isValidObjectId(id)) {
+      const applicant = await Applicant.findById(id).populate(
+        "eligibleProducts",
+        "name description minAge maxAge minCreditScore minSalary",
+      );
+
+      if (!applicant) {
+        return res.status(404).json({
+          success: false,
+          message: "Applicant not found",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        data: applicant,
       });
     }
 
-    const applicant = await Applicant.findById(id).populate(
+    applicants = await Applicant.find({
+      fullName: { $regex: id, $options: "i" },
+    }).populate(
       "eligibleProducts",
       "name description minAge maxAge minCreditScore minSalary",
     );
 
-    if (!applicant) {
+    if (applicants.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "Applicant not found",
+        message: "No applicants found",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      data: applicant,
+      count: applicants.length,
+      data: applicants,
     });
   } catch (error) {
     next(error);
